@@ -42,7 +42,6 @@ public class Gmail extends Email {
         // It is guaranteed that:
         // 1. Each mail in the inbox is distinct.
         // 2. The mails are received in non-decreasing order. This means that the date of a new mail is greater than equal to the dates of mails received already.
-
         if(!check.isEmpty() && !check.contains(message) && inbox.size()<=getInboxCapacity()) inbox.addLast(new Object(date,sender,message));
         else if(!check.isEmpty() && !check.contains(message) && inbox.size()>getInboxCapacity()){
             trash.addLast(inbox.removeFirst());
@@ -55,37 +54,27 @@ public class Gmail extends Email {
     public void deleteMail(String message){
         // Each message is distinct
         // If the given message is found in any mail in the inbox, move the mail to trash, else do nothing
-        int count = 0;
-        if(check.contains(message)){
-            for(String str : check){
-                if(str.equals(message)) break;
-                ++count;
-            }
-        }
+        //for(Object obj : inbox) System.out.println(obj.getMessage() +" "+ obj.getDate()+" "+ obj.getSender());
         Deque<Object> temp = new LinkedList<>();
-        int tempCount = count;
-        while(tempCount!=0){
-            temp.addLast(inbox.removeFirst());
-            tempCount--;
-        }
+        if(!check.contains(message)) return ;
 
-        tempCount=count;
+        while(!inbox.isEmpty() && !inbox.peekFirst().getMessage().equals(message))temp.addLast(inbox.removeFirst());
         inbox.removeFirst();
-        while(tempCount-- >0) inbox.addFirst(temp.removeLast());
+        while(!temp.isEmpty()) inbox.addFirst(temp.removeLast());
     }
 
     public String findLatestMessage(){
         // If the inbox is empty, return null
         // Else, return the message of the latest mail present in the inbox
         if(inbox.isEmpty()) return "";
-        else return inbox.peekLast().getMessage();
+        return inbox.peekLast().getMessage();
     }
 
     public String findOldestMessage(){
         // If the inbox is empty, return null
         // Else, return the message of the oldest mail present in the inbox
         if(inbox.isEmpty()) return "";
-        else return inbox.peekFirst().getMessage();
+        return inbox.peekFirst().getMessage();
     }
 
     public int findMailsBetweenDates(Date start, Date end){
@@ -99,7 +88,7 @@ public class Gmail extends Email {
             if(!start.after(date) && !end.before(date)) ++count;
             temp.addLast(obj);
         }
-        while(!temp.isEmpty()) inbox.addFirst(temp.removeFirst());
+        while(!temp.isEmpty()) inbox.addFirst(temp.removeLast());
         return count;
     }
 
