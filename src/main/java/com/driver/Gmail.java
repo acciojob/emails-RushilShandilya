@@ -42,8 +42,8 @@ public class Gmail extends Email {
         // It is guaranteed that:
         // 1. Each mail in the inbox is distinct.
         // 2. The mails are received in non-decreasing order. This means that the date of a new mail is greater than equal to the dates of mails received already.
-        if(!check.isEmpty() && !check.contains(message) && inbox.size()<=getInboxCapacity()) inbox.addLast(new Object(date,sender,message));
-        else if(!check.isEmpty() && !check.contains(message) && inbox.size()>getInboxCapacity()){
+        if(!check.isEmpty() && !check.contains(message) && inbox.size()<getInboxCapacity()) inbox.addLast(new Object(date,sender,message));
+        else if(!check.isEmpty() && !check.contains(message) && inbox.size()>=getInboxCapacity()){
             trash.addLast(inbox.removeFirst());
             inbox.addLast(new Object(date,sender,message));
         }else if(!check.isEmpty() && check.contains(message)) trash.addLast(new Object(date,sender,message));
@@ -85,8 +85,7 @@ public class Gmail extends Email {
         while(!inbox.isEmpty()){
             Object obj = inbox.removeFirst();
             Date date = obj.getDate();
-            //if(!start.after(date) && !end.before(date)) ++count;
-            if(date.after(start) && date.before(end)) ++count;
+            if(!start.after(date) && !end.before(date)) ++count;
             temp.addLast(obj);
         }
         while(!temp.isEmpty()) inbox.addFirst(temp.removeLast());
