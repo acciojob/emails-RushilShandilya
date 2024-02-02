@@ -12,13 +12,11 @@ public class Workspace extends Gmail{
 
     public Workspace(String emailId) {
         // The inboxCapacity is equal to the maximum value an integer can store.
-
         super(emailId,Integer.MAX_VALUE);
     }
 
     public void addMeeting(Meeting meeting){
         //add the meeting to calendar
-
         calendar.add(meeting);
     }
 
@@ -32,7 +30,25 @@ public class Workspace extends Gmail{
             LocalTime y = b.getStartTime();
             return x.compareTo(y);
         });
-        for(Meeting meeting : calendar) System.out.println(meeting.getStartTime() + " " + meeting.getEndTime());
-        return 0;
+        LocalTime prevEndTime = LocalTime.parse("00:00");
+        int prevEndTimeHour = prevEndTime.getHour() , prevEndTimeMinute = prevEndTime.getMinute();
+        int count = 0;
+        for(Meeting meeting : calendar){
+            int currStartTimeHour = meeting.getStartTime().getHour() , currStartTimeMinute = meeting.getEndTime().getHour();
+            int currEndTimeHour = meeting.getEndTime().getHour() , currEndTimeMinute = meeting.getEndTime().getMinute();
+
+            if(prevEndTimeHour<=currStartTimeHour){
+                if(prevEndTimeHour<currStartTimeHour){
+                    ++count;
+                    prevEndTimeHour = currEndTimeHour;
+                }else {
+                    if(prevEndTimeMinute<currEndTimeMinute){
+                        ++count;
+                        prevEndTimeHour = currEndTimeHour;
+                    }
+                }
+            }else if(prevEndTimeHour>=currEndTimeHour) prevEndTimeHour = currEndTimeHour;
+        }
+        return count;
     }
 }
