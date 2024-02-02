@@ -34,7 +34,7 @@ public class Workspace extends Gmail{
         int prevEndTimeHour = prevEndTime.getHour() , prevEndTimeMinute = prevEndTime.getMinute();
         int count = 0;
         for(Meeting meeting : calendar){
-            int currStartTimeHour = meeting.getStartTime().getHour() , currStartTimeMinute = meeting.getEndTime().getHour();
+            int currStartTimeHour = meeting.getStartTime().getHour() , currStartTimeMinute = meeting.getEndTime().getMinute();
             int currEndTimeHour = meeting.getEndTime().getHour() , currEndTimeMinute = meeting.getEndTime().getMinute();
 
             if(prevEndTimeHour<=currStartTimeHour){

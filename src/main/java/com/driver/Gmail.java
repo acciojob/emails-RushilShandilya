@@ -85,7 +85,8 @@ public class Gmail extends Email {
         while(!inbox.isEmpty()){
             Object obj = inbox.removeFirst();
             Date date = obj.getDate();
-            if(!start.after(date) && !end.before(date)) ++count;
+            //if(!start.after(date) && !end.before(date)) ++count;
+            if(date.after(start) && date.before(end)) ++count;
             temp.addLast(obj);
         }
         while(!temp.isEmpty()) inbox.addFirst(temp.removeLast());
